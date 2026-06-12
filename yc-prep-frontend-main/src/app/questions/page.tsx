@@ -7,6 +7,8 @@ import { SingleChoice } from "@/components/questions/single-choice";
 import { TrueFalse } from "@/components/questions/true-false";
 import { MatchTerms } from "@/components/questions/match-terms";
 import type { QuestionCategory } from "@/utils/questions/types";
+import { VoiceAnswer } from "@/components/questions/voice-answer";
+import { generateLessonQuestion } from "@/actions/generate-question";
 
 const ROUND_TO_CATEGORY: Record<number, QuestionCategory> = {
   1: "Startup 101",
@@ -27,6 +29,8 @@ export default function QuestionsPage() {
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [phase, setPhase] = useState<"quiz" | "ai-loading" | "ai">("quiz");
+  const [aiQuestion, setAiQuestion] = useState("");
 
   const roundNum = roundParam ? parseInt(roundParam) : 1;
   const milestoneNum = milestoneParam ? parseInt(milestoneParam) : 1;
@@ -68,10 +72,30 @@ export default function QuestionsPage() {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
-      // Finished all questions in milestone
-      router.push("/home/levels");
+      setPhase("ai-loading");
+      generateLessonQuestion(roundNum, milestoneNum).then(({ question }) => {
+        setAiQuestion(question);
+        setPhase("ai");
+      });
     }
   };
+
+  if (phase === "ai-loading") {
+    return (
+      <div className="flex h-screen items-center justify-center text-xl text-gray-100 bg-gray-500">
+        Preparing your challenge...
+      </div>
+    );
+  }
+
+  if (phase === "ai") {
+    return (
+      <VoiceAnswer
+        question={aiQuestion}
+        nextQuestion={() => router.push("/home/levels")}
+      />
+    );
+  }
 
   if (currentQuestion.type === "multiple choice") {
     return (

@@ -11,6 +11,7 @@ import { Stop } from "@/icons/Stop";
 import { Play } from "@/icons/Play";
 import { useRouter } from "next/navigation";
 import { transcript } from "@/actions/transcript";
+import { saveUserContext } from "@/utils/api";
 
 const interval = 300; // 30 seconds total
 export default function TellAbout() {
@@ -114,8 +115,9 @@ export default function TellAbout() {
 
   useEffect(() => {
     if (transcribedText) {
-      // todo save the answer or call callback
-      router.push("/onboarding/finish");
+      saveUserContext({ startup: transcribedText }).then(() => {
+        router.push("/onboarding/finish");
+      });
     }
   }, [transcribedText]);
 

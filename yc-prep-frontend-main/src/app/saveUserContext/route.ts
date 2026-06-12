@@ -8,6 +8,7 @@ export async function POST(req: NextRequest) {
   const state = loadUserState();
   if (body.role !== undefined) state.context.role = String(body.role);
   if (body.location !== undefined) state.context.location = String(body.location);
+  if (body.startup !== undefined) state.context.startup = String(body.startup);
   saveUserState(state);
   return NextResponse.json({ ok: true });
 }

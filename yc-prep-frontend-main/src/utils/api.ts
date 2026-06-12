@@ -89,7 +89,7 @@ export async function getAIQuestion() {
   return apiFetch("/getAIQuestion");
 }
 
-export async function saveUserContext(ctx: { role?: string; location?: string }) {
+export async function saveUserContext(ctx: { role?: string; location?: string; startup?: string }) {
   return apiFetch("/saveUserContext", {
     method: "POST",
     body: JSON.stringify(ctx),

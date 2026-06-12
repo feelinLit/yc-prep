@@ -31,6 +31,7 @@ export interface UserProgress {
 export interface UserContext {
   role?: string;
   location?: string;
+  startup?: string;
 }
 
 export interface UserState {
