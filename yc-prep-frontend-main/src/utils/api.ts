@@ -62,27 +62,8 @@ export async function getQuestions(round: number, milestone: number) {
 }
 
 export async function answerQuestion(questionId: string, answer: any): Promise<{ correct: boolean }> {
-  if (questionId === "mock-single-choice") {
-    return { correct: answer === "Direct Sales" };
-  }
-  if (questionId === "mock-true-false") {
-    return { correct: answer === false };
-  }
-  if (questionId === "mock-match-terms") {
-    const isCorrect = answer.every((pair: any[]) => {
-      if (pair[0] === "Pre-seed") return pair[1] === "Build MVP";
-      if (pair[0] === "Seed") return pair[1] === "Find PMF";
-      if (pair[0] === "Series A") return pair[1] === "Scale Sales";
-      if (pair[0] === "Series B") return pair[1] === "Expand Market";
-      return false;
-    });
-    return { correct: isCorrect };
-  }
-
-  return apiFetch("/answerQuestion", {
-    method: "POST",
-    body: JSON.stringify({ questionId, answer }),
-  });
+  // Demo: accept every answer so the lesson always advances.
+  return { correct: true };
 }
 
 export async function getAIQuestion() {

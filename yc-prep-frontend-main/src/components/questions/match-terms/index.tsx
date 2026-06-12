@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { QuestionsProgress } from "@/components/questions/Progress";
 import { QuestionCategoryBadge } from "@/components/questions/QuestionCategoryBadge";
-import {
-  BigButton,
-  BigButtonProps,
-} from "@/components/questions/voice-answer/Buttons";
+import { BigButton, BigButtonProps } from "@/components/questions/voice-answer/Buttons";
+import { FeedbackBanner } from "@/components/questions/FeedbackBanner";
 import { clsx } from "clsx";
-import { delay } from "@/utils";
 import { QuestionOptionState, QuestionCategory } from "@/utils/questions/types";
 import { questionStateVariant } from "@/utils/questions";
 import { answerQuestion } from "@/utils/api";
@@ -14,12 +11,8 @@ import { answerQuestion } from "@/utils/api";
 type MatchOptionState = QuestionOptionState | "semi-selected";
 type MatchOption = { option: string; state: MatchOptionState };
 
-function matchQuestionStateVariant(
-  state: MatchOptionState,
-): BigButtonProps["variant"] {
-  if (state == "semi-selected") {
-    return "blue-answer";
-  }
+function matchQuestionStateVariant(state: MatchOptionState): BigButtonProps["variant"] {
+  if (state === "semi-selected") return "blue-answer";
   return questionStateVariant(state);
 }
 
@@ -44,74 +37,56 @@ export function MatchTerms({
   const [rightMatchOptions, setRightMatchOptions] = useState<MatchOption[]>([]);
   const [selectedPairs, setSelectedPairs] = useState<{ left: number; right: number }[]>([]);
   const [loadingAnswers, setLoadingAnswers] = useState(false);
+  const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(null);
+  const [shakeAll, setShakeAll] = useState(false);
 
   useEffect(() => {
     setLeftMatchOptions(left.map((option) => ({ option, state: "non-selected" })));
     setRightMatchOptions(right.map((option) => ({ option, state: "non-selected" })));
     setSelectedPairs([]);
+    setFeedback(null);
+    setShakeAll(false);
   }, [left, right, questionId]);
 
   function handleClick(index: number, side: "left" | "right") {
     const selectedQuestion =
       side === "left" ? leftMatchOptions[index] : rightMatchOptions[index];
-    if (selectedQuestion.state != "non-selected") {
-      return;
-    }
+    if (selectedQuestion.state !== "non-selected") return;
 
     if (side === "left") {
-      const selectedRightQuestion = rightMatchOptions.find(
-        (q) => q.state === "semi-selected",
-      );
+      const selectedRightQuestion = rightMatchOptions.find((q) => q.state === "semi-selected");
       if (selectedRightQuestion) {
         setLeftMatchOptions((prev) =>
           prev.map((q, i) => (i === index ? { ...q, state: "selected" } : q)),
         );
         setRightMatchOptions((prev) =>
-          prev.map((q) =>
-            q === selectedRightQuestion ? { ...q, state: "selected" } : q,
-          ),
+          prev.map((q) => (q === selectedRightQuestion ? { ...q, state: "selected" } : q)),
         );
-
         setSelectedPairs((prev) => [
           ...prev,
-          {
-            left: index,
-            right: rightMatchOptions.indexOf(selectedRightQuestion),
-          },
+          { left: index, right: rightMatchOptions.indexOf(selectedRightQuestion) },
         ]);
       } else if (!leftMatchOptions.some((q) => q.state === "semi-selected")) {
         setLeftMatchOptions((prev) =>
-          prev.map((q, i) =>
-            i === index ? { ...q, state: "semi-selected" } : q,
-          ),
+          prev.map((q, i) => (i === index ? { ...q, state: "semi-selected" } : q)),
         );
       }
     } else {
-      const selectedLeftQuestion = leftMatchOptions.find(
-        (q) => q.state === "semi-selected",
-      );
+      const selectedLeftQuestion = leftMatchOptions.find((q) => q.state === "semi-selected");
       if (selectedLeftQuestion) {
         setRightMatchOptions((prev) =>
           prev.map((q, i) => (i === index ? { ...q, state: "selected" } : q)),
         );
         setLeftMatchOptions((prev) =>
-          prev.map((q) =>
-            q === selectedLeftQuestion ? { ...q, state: "selected" } : q,
-          ),
+          prev.map((q) => (q === selectedLeftQuestion ? { ...q, state: "selected" } : q)),
         );
-
         setSelectedPairs((prev) => [
           ...prev,
-          {
-            left: leftMatchOptions.indexOf(selectedLeftQuestion),
-            right: index,
-          },
+          { left: leftMatchOptions.indexOf(selectedLeftQuestion), right: index },
         ]);
       } else if (!rightMatchOptions.some((q) => q.state === "semi-selected")) {
         setRightMatchOptions((prev) =>
-          prev.map((q, i) =>
-            i === index ? { ...q, state: "semi-selected" } : q,
-          ),
+          prev.map((q, i) => (i === index ? { ...q, state: "semi-selected" } : q)),
         );
       }
     }
@@ -139,18 +114,18 @@ export function MatchTerms({
       setLoadingAnswers(false);
       const resultState = res.correct ? "correct" : "incorrect";
 
-      setLeftMatchOptions((prev) =>
-        prev.map((q) => ({ ...q, state: resultState })),
-      );
-      setRightMatchOptions((prev) =>
-        prev.map((q) => ({ ...q, state: resultState })),
-      );
+      setLeftMatchOptions((prev) => prev.map((q) => ({ ...q, state: resultState })));
+      setRightMatchOptions((prev) => prev.map((q) => ({ ...q, state: resultState })));
+
+      if (!res.correct) {
+        setShakeAll(true);
+        setTimeout(() => setShakeAll(false), 500);
+      }
+      setFeedback(res.correct ? "correct" : "incorrect");
     } catch (err) {
       console.error("Failed to check matching answers:", err);
       setLoadingAnswers(false);
     }
-    await delay(1500);
-    nextQuestion();
   }
 
   return (
@@ -169,11 +144,15 @@ export function MatchTerms({
           {leftMatchOptions.map(({ option, state }, index) => (
             <BigButton
               key={index}
-              className={clsx("min-w-56", loadingAnswers && "animate-pulse")}
+              className={clsx(
+                "min-w-56",
+                loadingAnswers && "animate-pulse",
+                shakeAll && "animate-shake",
+              )}
               variant={matchQuestionStateVariant(state)}
-              fontWeight={state == "non-selected" ? "normal" : undefined}
+              fontWeight={state === "non-selected" ? "normal" : undefined}
               onClick={() => handleClick(index, "left")}
-              disabled={state != "non-selected"}
+              disabled={state !== "non-selected"}
             >
               {option}
             </BigButton>
@@ -184,17 +163,25 @@ export function MatchTerms({
           {rightMatchOptions.map(({ option, state }, index) => (
             <BigButton
               key={index}
-              className={clsx("min-w-56", loadingAnswers && "animate-pulse")}
+              className={clsx(
+                "min-w-56",
+                loadingAnswers && "animate-pulse",
+                shakeAll && "animate-shake",
+              )}
               variant={matchQuestionStateVariant(state)}
-              fontWeight={state == "non-selected" ? "normal" : undefined}
+              fontWeight={state === "non-selected" ? "normal" : undefined}
               onClick={() => handleClick(index, "right")}
-              disabled={state != "non-selected"}
+              disabled={state !== "non-selected"}
             >
               {option}
             </BigButton>
           ))}
         </div>
       </div>
+
+      {feedback && (
+        <FeedbackBanner result={feedback} onContinue={nextQuestion} />
+      )}
     </div>
   );
 }

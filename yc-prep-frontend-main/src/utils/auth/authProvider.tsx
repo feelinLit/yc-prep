@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { getCookie } from "cookies-next";
+import { deleteCookie } from "cookies-next";
 import {
   accessTokenCookieName,
   refreshTokenCookieName,
+  authUserCookieName,
 } from "@/constants";
 
 export const AuthContext = React.createContext<{
@@ -21,12 +22,14 @@ export const AuthProvider = ({
 }): React.ReactNode => {
   const router = useRouter();
   const pathname = usePathname();
-  const [accessToken, setAccessToken] = React.useState(
-    getCookie(accessTokenCookieName) || "none",
-  );
-  const [refreshToken, setRefreshToken] = React.useState(
-    getCookie(refreshTokenCookieName) || "none",
-  );
+  const [accessToken, setAccessToken] = React.useState("none");
+  const [refreshToken, setRefreshToken] = React.useState("none");
+
+  useEffect(() => {
+    deleteCookie(accessTokenCookieName);
+    deleteCookie(refreshTokenCookieName);
+    deleteCookie(authUserCookieName);
+  }, []);
 
   useEffect(() => {
     const loggedIn =

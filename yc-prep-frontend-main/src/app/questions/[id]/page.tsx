@@ -1,10 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SingleChoice } from "@/components/questions/single-choice";
 import { VoiceAnswer } from "@/components/questions/voice-answer";
 import { TrueFalse } from "@/components/questions/true-false";
 import { MatchTerms } from "@/components/questions/match-terms";
+import { markLessonComplete } from "@/utils/lessons";
 
 const singleChoiceQuestion = "How are you going to get users/customers?";
 const singleChoiceOptions = ["SEO", "Ads", "Word of mouth", "Direct Sales"];
@@ -21,8 +22,16 @@ export default function QuestionPage({
   params: { id: string };
 }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const nextQuestion = () => {
     console.log("Next question");
+  };
+
+  const finishDemoLesson = () => {
+    const round = Number(searchParams.get("round"));
+    const milestone = Number(searchParams.get("milestone"));
+    if (round && milestone) markLessonComplete(round, milestone);
+    router.push("/home/levels");
   };
 
   if (id == "voice-answer")
@@ -78,7 +87,7 @@ export default function QuestionPage({
         questionId="QCvoHRstqAr9HqUUMWVk"
         category="Growth Strategies"
         progress={50}
-        nextQuestion={() => router.push("/home/levels")}
+        nextQuestion={finishDemoLesson}
       />
     );
 

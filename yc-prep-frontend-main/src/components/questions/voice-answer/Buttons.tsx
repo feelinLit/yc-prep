@@ -30,7 +30,7 @@ export function BigButton({
   return (
     <button
       className={cn(
-        "flex h-[60px] items-center justify-center rounded-lg border-2 p-4 text-white transition-all",
+        "flex min-h-[60px] items-center justify-center rounded-lg border-2 p-4 text-white transition-all active:scale-95 text-center",
         variant == "dark" && "border-gray-400 bg-gray-400",
         variant == "green-dark" &&
           "border-accent bg-accent text-gray-400",
@@ -43,7 +43,7 @@ export function BigButton({
         variant == "gray-answer" && "border-gray-700 bg-gray-700 text-gray-100",
         variant == "ghost" && "border-white",
         variant == "ghost-dark" && "border-gray-400 text-gray-400",
-        size == "bigger" && "h-[80px] p-6 text-lg",
+        size == "bigger" && "min-h-[80px] p-6 text-lg",
         fontWeight == "bold" && "font-bold",
         className,
       )}

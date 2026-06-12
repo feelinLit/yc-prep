@@ -28,8 +28,8 @@ export default function Login() {
   return (
     <div className="flex h-dvh flex-col items-center justify-center gap-10 bg-orange-500 text-white">
       <div className="text-center space-y-4 mb-4">
-        <h1 className="text-6xl font-bold tracking-tight">App Name</h1>
-        <p className="text-xl font-medium text-orange-100">Your Catchy Slogan Goes Here</p>
+        <h1 className="text-6xl font-bold tracking-tight">YC Prep</h1>
+        <p className="text-xl font-medium text-orange-100">From vibe-coder to venture-ready.</p>
       </div>
       
       <div className="flex flex-col items-center gap-6 rounded-2xl bg-white/10 p-10 backdrop-blur-md shadow-xl border border-white/20">

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Round } from "@/components/levels/Round";
 import { getDetailedProgress, getUserData, DetailedProgress, UserProfile } from "@/utils/api";
+import { getCompletedLessons } from "@/utils/lessons";
 import { Round as RoundType } from "@/utils/rounds/types";
 
 const ROUNDS: { name: RoundType; num: number }[] = [
@@ -28,7 +29,8 @@ export default function Levels() {
         setProfile(profileData);
         setLoading(false);
         if (autoselect) {
-          setSelected({ round: profileData.round ?? 1, milestone: profileData.milestone ?? 1 });
+          // Right after onboarding: highlight lesson 4 of Friends and family (round 1).
+          setSelected({ round: 1, milestone: 4 });
         }
       })
       .catch((err) => {
@@ -47,12 +49,16 @@ export default function Levels() {
 
   const currentRound = profile?.round ?? 1;
   const currentMilestone = profile?.milestone ?? 1;
+  const completedLessons = getCompletedLessons();
 
   return (
     <div className="flex flex-col overflow-y-auto pb-8">
       {ROUNDS.map(({ name, num }) => {
         const roundData = detailedProgress.find((r) => r.round === num);
-        const milestones = roundData?.milestones ?? [];
+        const milestones = (roundData?.milestones ?? []).map((m) => ({
+          ...m,
+          solved: m.solved || completedLessons.has(`${num}-${m.milestone}`),
+        }));
 
         return (
           <Round
