@@ -5,6 +5,7 @@ import { SingleChoice } from "@/components/questions/single-choice";
 import { VoiceAnswer } from "@/components/questions/voice-answer";
 import { TrueFalse } from "@/components/questions/true-false";
 import { MatchTerms } from "@/components/questions/match-terms";
+import { DemoDay } from "@/components/questions/demo-day";
 import { markLessonComplete } from "@/utils/lessons";
 
 const singleChoiceQuestion = "How are you going to get users/customers?";
@@ -33,6 +34,9 @@ export default function QuestionPage({
     if (round && milestone) markLessonComplete(round, milestone);
     router.push("/home/levels");
   };
+
+  if (id == "demo-day")
+    return <DemoDay onFinish={() => router.push("/home/levels")} />;
 
   if (id == "voice-answer")
     return <VoiceAnswer question={singleChoiceQuestion} nextQuestion={nextQuestion} />;

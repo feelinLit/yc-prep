@@ -143,7 +143,10 @@ export function Round({
             );
           })}
         </div>
-        <div className={clsx("flex w-full max-w-sm cursor-pointer items-center justify-center gap-4 py-3 rounded-xl hover:brightness-110 transition-all font-semibold", theme.bg, theme.text)}>
+        <div
+          className={clsx("flex w-full max-w-sm cursor-pointer items-center justify-center gap-4 py-3 rounded-xl hover:brightness-110 transition-all font-semibold", theme.bg, theme.text)}
+          onClick={() => router.push("/questions/demo-day")}
+        >
           <p className="text-center text-sm uppercase tracking-wider">
             Demo day
           </p>
