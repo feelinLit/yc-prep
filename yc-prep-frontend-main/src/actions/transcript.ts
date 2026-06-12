@@ -1,7 +1,6 @@
 "use server";
 
-const DEEPGRAM_API_KEY =
-  process.env.DEEPGRAM_API_KEY ?? "0067c795b4e768e1478a1db0734ace5e7a87890f";
+const DEEPGRAM_API_KEY = process.env.DEEPGRAM_API_KEY;
 
 const MOCK_TRANSCRIPT =
   "Okay, so we have three main strategies of acquiring new users. The first one is social media marketing, campaign creating content. Second is collaboration with influencers and thought leaders in the industry. And third, because we are a blockchain company, we'll launch a token and it will be our go-to-market strategy at the later stage.";
@@ -9,7 +8,7 @@ const MOCK_TRANSCRIPT =
 export async function transcript(formData: FormData): Promise<string> {
   try {
     const file = formData.get("file") as File;
-    if (!file) return MOCK_TRANSCRIPT;
+    if (!file || !DEEPGRAM_API_KEY) return MOCK_TRANSCRIPT;
 
     const buf = Buffer.from(await file.arrayBuffer());
 
