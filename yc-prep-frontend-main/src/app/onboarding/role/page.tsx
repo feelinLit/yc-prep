@@ -6,6 +6,7 @@ import { Title } from "@/components/questions/voice-answer/Title";
 import { BigButton } from "@/components/questions/voice-answer/Buttons";
 import { clsx } from "clsx";
 import { useRouter } from "next/navigation";
+import { saveUserContext } from "@/utils/api";
 
 const defaultRoles = ["CEO", "CTO", "CMO"];
 export default function Role() {
@@ -67,8 +68,8 @@ export default function Role() {
       <BigButton
         className="w-64"
         disabled={!role}
-        onClick={() => {
-          localStorage.setItem("userRole", role);
+        onClick={async () => {
+          await saveUserContext({ role });
           router.push("/onboarding/location");
         }}
       >

@@ -19,7 +19,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const segments = pathname.split("/");
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [userRole, setUserRole] = useState("CEO");
 
   const handleLogout = () => {
     deleteCookie(accessTokenCookieName);
@@ -30,11 +29,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     getUserData()
       .then((data) => setProfile(data))
       .catch((err) => console.error("Failed to load user profile in layout:", err));
-      
-    const storedRole = localStorage.getItem("userRole");
-    if (storedRole) {
-      setUserRole(storedRole);
-    }
   }, []);
 
   const bucks = profile?.bucks ?? 0;
@@ -157,7 +151,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 {profile?.displayName || "Founder"}
               </span>
               <span className="text-xs text-gray-100 truncate">
-                {profile?.role || userRole}
+                {profile?.role || "CEO"}
               </span>
             </div>
           </div>

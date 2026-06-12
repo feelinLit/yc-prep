@@ -6,5 +6,5 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   const state = loadUserState();
   const { energyUpdatedAt, ...profile } = state.profile;
-  return NextResponse.json({ ...profile, ...state.progress });
+  return NextResponse.json({ ...profile, ...state.progress, ...state.context });
 }

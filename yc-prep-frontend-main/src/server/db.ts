@@ -28,9 +28,15 @@ export interface UserProgress {
   finished: boolean;
 }
 
+export interface UserContext {
+  role?: string;
+  location?: string;
+}
+
 export interface UserState {
   profile: UserProfile;
   progress: UserProgress;
+  context: UserContext;
   questionsDone: Record<string, { correct: boolean }>;
 }
 
@@ -52,6 +58,7 @@ const DEFAULT_STATE: UserState = {
     lastTimeSolvedQuestion: 0,
   },
   progress: { round: 1, milestone: 1, finished: false },
+  context: {},
   questionsDone: {},
 };
 
@@ -77,6 +84,7 @@ export function loadUserState(): UserState {
   } else {
     state = JSON.parse(JSON.stringify(DEFAULT_STATE));
   }
+  state.context ??= {};
   const changed = applyEnergyRegen(state);
   if (changed || !fs.existsSync(STATE_PATH)) saveUserState(state);
   return state;

@@ -6,6 +6,7 @@ import { Title } from "@/components/questions/voice-answer/Title";
 import { BigButton } from "@/components/questions/voice-answer/Buttons";
 import { MapPin } from "@/icons/MapPin";
 import { useRouter } from "next/navigation";
+import { saveUserContext } from "@/utils/api";
 
 export default function Location() {
   const router = useRouter();
@@ -33,7 +34,10 @@ export default function Location() {
       <BigButton
         className="w-64"
         disabled={!location}
-        onClick={() => router.push("/onboarding/prepare")}
+        onClick={async () => {
+          await saveUserContext({ location });
+          router.push("/onboarding/prepare");
+        }}
       >
         Next
       </BigButton>
