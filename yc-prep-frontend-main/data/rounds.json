@@ -1,0 +1,5 @@
+[
+  { "round": 1, "name": "Friends and family", "milestones": [1, 2, 3, 4] },
+  { "round": 2, "name": "Pre-seed round", "milestones": [1, 2, 3] },
+  { "round": 3, "name": "Seed round", "milestones": [1, 2, 3] }
+]
