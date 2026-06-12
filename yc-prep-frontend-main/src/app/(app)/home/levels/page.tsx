@@ -9,9 +9,6 @@ const ROUNDS: { name: RoundType; num: number }[] = [
   { name: "Friends and family", num: 1 },
   { name: "Pre-seed", num: 2 },
   { name: "Seed", num: 3 },
-  { name: "Series A", num: 4 },
-  { name: "Series B", num: 5 },
-  { name: "Series C", num: 6 },
 ];
 
 export default function Levels() {

@@ -47,7 +47,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       href: "/home/levels",
       icon: Rocket,
       label: "Levels",
-      active: segments[2] === "levels" || segments[2] === "topics",
+      active: segments[2] === "levels",
     },
     {
       href: "/dial-book",
