@@ -115,6 +115,7 @@ export default function TellAbout() {
 
   useEffect(() => {
     if (transcribedText) {
+      sessionStorage.setItem("onboardingTranscript", transcribedText);
       saveUserContext({ startup: transcribedText }).then(() => {
         router.push("/onboarding/finish");
       });
