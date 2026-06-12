@@ -32,11 +32,15 @@ export function Round({
   milestones,
   currentRound,
   currentMilestone,
+  selectedMilestone,
+  onMilestoneSelect,
 }: {
   round: RoundType;
   milestones: Milestone[];
   currentRound: number;
   currentMilestone: number;
+  selectedMilestone?: number;
+  onMilestoneSelect?: (milestone: number | null) => void;
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
@@ -56,7 +60,7 @@ export function Round({
   return (
     <div
       className={clsx(
-        "flex flex-col w-full mb-6 border rounded-2xl overflow-hidden transition-all duration-300 shadow-md bg-gray-800/20",
+        "flex flex-col w-full mb-6 border rounded-2xl overflow-visible transition-all duration-300 shadow-md bg-gray-800/20",
         theme.border
       )}
     >
@@ -88,22 +92,45 @@ export function Round({
               (roundNum === currentRound && milestone > currentMilestone);
 
             const Component = solved ? MilestoneComplete : MilestoneIncomplete;
+            const isSelected = selectedMilestone === milestone && !isLocked;
 
             return (
-              <Component
+              <div
                 key={index}
-                number={milestone}
-                className={clsx(
-                  alignmentClasses[index % alignmentClasses.length],
-                  "transition-all duration-200 hover:scale-110",
-                  isLocked ? "opacity-35 cursor-not-allowed" : "cursor-pointer drop-shadow-[0_0_8px_rgba(255,255,255,0.05)]",
+                className={clsx("relative", alignmentClasses[index % alignmentClasses.length])}
+              >
+                <Component
+                  number={milestone}
+                  className={clsx(
+                    "transition-all duration-200 hover:scale-110",
+                    isLocked ? "opacity-35 cursor-not-allowed" : "cursor-pointer drop-shadow-[0_0_8px_rgba(255,255,255,0.05)]",
+                    isSelected && "scale-110",
+                  )}
+                  onClick={() => {
+                    if (!isLocked) {
+                      onMilestoneSelect?.(isSelected ? null : milestone);
+                    }
+                  }}
+                />
+                {isSelected && (
+                  <div className="absolute bottom-full left-1/2 mb-3 -translate-x-1/2 z-20 flex flex-col items-center gap-2 rounded-2xl bg-gray-800 border border-gray-600 px-5 py-4 shadow-2xl w-52">
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-xs uppercase tracking-widest text-gray-400 font-semibold">Lesson {milestone}</span>
+                      <span className={clsx("text-base font-bold", theme.text)}>{round}</span>
+                    </div>
+                    <button
+                      className={clsx(
+                        "w-full rounded-xl py-2.5 text-sm font-bold uppercase tracking-wider transition-all hover:brightness-110 active:scale-95",
+                        theme.bg, theme.text, "border", theme.border,
+                      )}
+                      onClick={() => router.push("/questions/demo-lesson")}
+                    >
+                      Start
+                    </button>
+                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 size-4 rotate-45 bg-gray-800 border-r border-b border-gray-600" />
+                  </div>
                 )}
-                onClick={() => {
-                  if (!isLocked) {
-                    router.push(`/questions?round=${roundNum}&milestone=${milestone}`);
-                  }
-                }}
-              />
+              </div>
             );
           })}
         </div>

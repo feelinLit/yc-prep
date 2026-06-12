@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { SingleChoice } from "@/components/questions/single-choice";
 import { VoiceAnswer } from "@/components/questions/voice-answer";
 import { TrueFalse } from "@/components/questions/true-false";
@@ -19,6 +20,7 @@ export default function QuestionPage({
 }: {
   params: { id: string };
 }) {
+  const router = useRouter();
   const nextQuestion = () => {
     console.log("Next question");
   };
@@ -51,16 +53,34 @@ export default function QuestionPage({
     
   if (id == "match-terms")
     return (
-      <MatchTerms 
+      <MatchTerms
         question={matchTermsQuestion}
         left={matchTermsLeft}
         right={matchTermsRight}
         questionId="mock-match-terms"
         category="Startup 101"
         progress={66}
-        nextQuestion={nextQuestion} 
+        nextQuestion={nextQuestion}
       />
     );
-    
+
+  if (id == "demo-lesson")
+    return (
+      <MatchTerms
+        question="Match the startup terms with their correct descriptions."
+        left={["Angel Investor", "Burn Rate", "Equity Financing", "Series A Funding"]}
+        right={[
+          "A high net worth individual who provides financial backing for small startups or entrepreneurs.",
+          "The rate at which a new company spends its venture capital to finance overhead before generating positive cash flow from operations.",
+          "Raising capital through the sale of shares.",
+          "The first significant round of business financing.",
+        ]}
+        questionId="QCvoHRstqAr9HqUUMWVk"
+        category="Growth Strategies"
+        progress={50}
+        nextQuestion={() => router.push("/home/levels")}
+      />
+    );
+
   return null;
 }

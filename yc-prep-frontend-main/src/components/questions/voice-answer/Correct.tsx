@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Balance } from "@/components/Balance";
 import { Title } from "@/components/questions/voice-answer/Title";
 import { BigButton } from "@/components/questions/voice-answer/Buttons";
 import { AnswerExplanation } from "@/components/questions/voice-answer/AnswerExplanation";
@@ -22,7 +21,6 @@ export function Correct({
   return (
     <div className="flex h-dvh flex-col items-center justify-between bg-bright-green pb-6">
       <div className="flex w-full flex-col items-center gap-2">
-        <Balance />
         <QuestionsProgress progress={80} className="w-56" />
       </div>
       <div className="flex max-w-80 flex-col items-center gap-4 self-center p-4">

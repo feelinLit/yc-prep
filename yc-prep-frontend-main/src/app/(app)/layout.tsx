@@ -31,11 +31,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       .catch((err) => console.error("Failed to load user profile in layout:", err));
   }, []);
 
-  const bucks = profile?.bucks ?? 0;
-  const streak = profile?.dailyStreak ?? 0;
-  const streakIsActive = streak > 0;
-  const energy = profile?.energy ?? 5;
-
   const navItems = [
     {
       href: "/home/levels",
@@ -160,34 +155,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col overflow-hidden h-full relative">
-        {/* Top Right Status Bar */}
-        <div className="absolute top-4 right-4 md:right-8 z-30 flex items-center gap-3 md:gap-5 bg-gray-900/60 backdrop-blur-md border border-gray-700/50 rounded-2xl px-4 py-2 shadow-lg">
-          <div className="flex items-center gap-1.5">
-            <span className="text-gray-300 text-[11px] uppercase tracking-wider hidden lg:block font-semibold">Balance</span>
-            <div className="flex items-center gap-1 font-bold text-accent text-sm md:text-base">
-              <Image src="/dollar-banknote.png" alt="Bucks" width={18} height={18} style={{ imageRendering: "pixelated" }} />
-              <span>{bucks}</span>
-            </div>
-          </div>
-          <div className="w-px h-5 bg-gray-700/50"></div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-gray-300 text-[11px] uppercase tracking-wider hidden lg:block font-semibold">Streak</span>
-            <div className="flex items-center gap-1 font-bold text-red-50 text-sm md:text-base">
-              <Image src={streakIsActive ? "/streak-active.png" : "/streak-inactive.png"} alt="Streak" width={16} height={16} />
-              <span>{streak} d</span>
-            </div>
-          </div>
-          <div className="w-px h-5 bg-gray-700/50"></div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-gray-300 text-[11px] uppercase tracking-wider hidden lg:block font-semibold">Energy</span>
-            <div className="flex gap-0.5">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Image key={i} src={i < energy ? "/can-fulfilled.png" : "/can-empty.png"} alt="energy" width={14} height={14} style={{ imageRendering: "pixelated" }} />
-              ))}
-            </div>
-          </div>
-        </div>
-
         <div className="flex-1 overflow-y-auto">
           {children}
         </div>

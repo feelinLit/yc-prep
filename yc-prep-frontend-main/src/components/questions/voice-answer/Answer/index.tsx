@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Balance } from "@/components/Balance";
 import { Title } from "@/components/questions/voice-answer/Title";
 import {
   QuestionProgress,
@@ -141,7 +140,6 @@ export function Answer({
   return (
     <div className="flex h-dvh flex-col items-center justify-between bg-bright-blue pb-6">
       <div className="flex w-full flex-col items-center gap-2">
-        <Balance />
         <QuestionsProgress progress={30} className="w-56" />
       </div>
       <div className="flex max-w-64 flex-col items-center gap-8 self-center p-4">

@@ -21,7 +21,7 @@ export default function Finish() {
       <BigButton
         className="w-64"
         onClick={() => {
-          router.push("/home/levels");
+          router.push("/home/levels?autoselect=1");
         }}
       >
         Start

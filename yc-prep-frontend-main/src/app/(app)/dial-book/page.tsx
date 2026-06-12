@@ -1,6 +1,5 @@
 "use client";
 
-import { Balance } from "@/components/Balance";
 import { InvestorContact } from "@/components/dial-book/InvestorContact";
 
 export default function DialBook() {
@@ -38,10 +37,6 @@ export default function DialBook() {
 
   return (
     <div className="flex flex-col w-full max-w-5xl mx-auto px-4 md:px-8 py-6 overflow-y-auto gap-6">
-      <div className="md:hidden">
-        <Balance />
-      </div>
-
       <div className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight">Investor Directory</h1>
         <p className="text-gray-100 text-sm">Review your investor relations and active investments.</p>

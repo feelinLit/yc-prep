@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Balance } from "@/components/Balance";
 import { QuestionsProgress } from "@/components/questions/Progress";
 import { QuestionCategoryBadge } from "@/components/questions/QuestionCategoryBadge";
 import { BigButton } from "@/components/questions/voice-answer/Buttons";
@@ -62,7 +61,6 @@ export function TrueFalse({
   return (
     <div className="flex h-dvh flex-col items-center justify-between gap-8 pb-6 bg-gray-500">
       <div className="flex w-full flex-col items-center gap-2">
-        <Balance />
         <QuestionsProgress progress={progress} className="w-56" />
       </div>
       <div className="flex max-w-80 flex-col gap-1.5">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Round } from "@/components/levels/Round";
 import { getDetailedProgress, getUserData, DetailedProgress, UserProfile } from "@/utils/api";
 import { Round as RoundType } from "@/utils/rounds/types";
@@ -12,9 +13,13 @@ const ROUNDS: { name: RoundType; num: number }[] = [
 ];
 
 export default function Levels() {
+  const searchParams = useSearchParams();
+  const autoselect = searchParams.get("autoselect") === "1";
+
   const [detailedProgress, setDetailedProgress] = useState<DetailedProgress[]>([]);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<{ round: number; milestone: number } | null>(null);
 
   useEffect(() => {
     Promise.all([getDetailedProgress(), getUserData()])
@@ -22,6 +27,9 @@ export default function Levels() {
         setDetailedProgress(progressData);
         setProfile(profileData);
         setLoading(false);
+        if (autoselect) {
+          setSelected({ round: profileData.round ?? 1, milestone: profileData.milestone ?? 1 });
+        }
       })
       .catch((err) => {
         console.error("Failed to load levels progress:", err);
@@ -53,6 +61,10 @@ export default function Levels() {
             milestones={milestones}
             currentRound={currentRound}
             currentMilestone={currentMilestone}
+            selectedMilestone={selected?.round === num ? selected.milestone : undefined}
+            onMilestoneSelect={(milestone) =>
+              setSelected(milestone !== null ? { round: num, milestone } : null)
+            }
           />
         );
       })}
