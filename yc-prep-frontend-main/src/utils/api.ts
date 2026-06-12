@@ -38,6 +38,7 @@ export interface UserProfile {
   milestone: number;
   finished: boolean;
   role?: string;
+  location?: string;
 }
 
 export interface DetailedProgress {
@@ -86,4 +87,11 @@ export async function answerQuestion(questionId: string, answer: any): Promise<{
 
 export async function getAIQuestion() {
   return apiFetch("/getAIQuestion");
+}
+
+export async function saveUserContext(ctx: { role?: string; location?: string }) {
+  return apiFetch("/saveUserContext", {
+    method: "POST",
+    body: JSON.stringify(ctx),
+  });
 }

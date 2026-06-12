@@ -23,7 +23,7 @@ export default function Login() {
     setCookie(refreshTokenCookieName, "demo-token");
     authContext?.setAccessToken("demo-token");
     authContext?.setRefreshToken("demo-token");
-    router.push("/home/levels");
+    router.push("/onboarding/role");
   };
   return (
     <div className="flex h-dvh flex-col items-center justify-center gap-10 bg-orange-500 text-white">

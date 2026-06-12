@@ -36,7 +36,7 @@ export const AuthProvider = ({
         router.push("/log-in");
       }
     } else if (pathname === "/log-in" || pathname === "/") {
-      router.push("/home/levels");
+      router.push("/onboarding/role");
     }
   }, [accessToken, refreshToken, pathname]);
 
